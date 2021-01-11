@@ -14,9 +14,9 @@ find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
-set(SOURCE_FILES main.cpp)
+#set(SOURCE_FILES main.cpp)
 include_directories(${CMAKE_BINARY_DIR})
-add_executable(LastCourseWork main.cpp mainwindow.cpp)
+add_executable(LastCourseWork main.cpp mainwindow.cpp rsa.cpp)
 
 # указываем, какие библиотеки необходимо подключить
 target_link_libraries(${PROJECT_NAME} Qt5::Core)

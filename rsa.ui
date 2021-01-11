@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RSA</class>
+ <widget class="QWidget" name="RSA">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>423</width>
+    <height>227</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>RSA</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QSplitter" name="splitter_9">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QSplitter" name="splitter_10">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QSplitter" name="splitter_7">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QSplitter" name="splitter">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>p</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit"/>
+       </widget>
+       <widget class="QSplitter" name="splitter_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>q</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_2"/>
+       </widget>
+       <widget class="QSplitter" name="splitter_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>n</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_3"/>
+       </widget>
+       <widget class="QSplitter" name="splitter_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>φ</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_4"/>
+       </widget>
+       <widget class="QSplitter" name="splitter_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>e</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_5"/>
+       </widget>
+       <widget class="QSplitter" name="splitter_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>d</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_6"/>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QSplitter" name="splitter_8">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Сохранить</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="text">
+       <string>Отменить</string>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
