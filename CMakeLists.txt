@@ -13,7 +13,11 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
+#if (APPLE)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
+#else
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
+#endif()
 #set(SOURCE_FILES main.cpp)
 include_directories(${CMAKE_BINARY_DIR})
 add_executable(LastCourseWork main.cpp mainwindow.cpp rsa.cpp)
