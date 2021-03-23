@@ -31,7 +31,7 @@ public:
     uint64_t get_d() {return this->d; };
     uint64_t get_phi() {return this->phi; };
 
-    static std::vector<uint8_t> read_bytes(QString);
+    static std::vector<uint8_t> read_bytes(std::string);
     QString write_bytes(const std::vector<uint8_t> &);
     std::vector<uint8_t> process_bytes(const std::vector<uint8_t> &, key , bool );
     void gen_keys(uint64_t p, uint64_t q);

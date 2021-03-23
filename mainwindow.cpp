@@ -32,7 +32,7 @@ void MainWindow::createKeys() {
 }
 
 void MainWindow::nextCommandRSA(bool encrypt) {
-    auto in = rsa->read_bytes(ui->textEdit->toPlainText());
+    auto in = rsa->read_bytes(ui->textEdit->toPlainText().toStdString());
     rsa->gen_keys(3557, 2579);
     qDebug() << rsa->get_e() << " " << rsa->get_d() << " " << rsa->get_n();
     auto out = rsa->process_bytes(in, {encrypt ? rsa->get_e() : rsa->get_d(), rsa->get_n()}, encrypt);

@@ -4,7 +4,6 @@
 
 // You may need to build the project (run Qt uic code generator) to get "ui_RSA.h" resolved
 
-#include <fstream>
 #include <QFile>
 #include <iostream>
 
@@ -33,14 +32,13 @@ void RSA::saveSettings() {
     this->close();
 }
 
-std::vector<uint8_t> RSA::read_bytes(QString text) {
-    std::string textIn = text.toStdString();
+std::vector<uint8_t> RSA::read_bytes(std::string textIn) {
     std::vector<uint8_t> ret(textIn.length());
     for (int i = 0; i < textIn.length(); i++) {
         ret[i] = (uint8_t) textIn[i];
         std::cout << ret[i];
     }
-
+    std::cout << std::endl;
     return ret;
 }
 
@@ -116,7 +114,9 @@ QString RSA::write_bytes(const std::vector<uint8_t> &data) {
     char* buf = new char[data.size()];
     for (int i = 0; i < data.size(); i++) {
         buf[i] = (char) data[i];
+        std::cout << data[i];
     }
+    std::cout << std::endl;
     QString ret = QString::fromLocal8Bit(buf);
     QFile file(".\\output.txt");
     if (file.open(QIODevice::WriteOnly)) {

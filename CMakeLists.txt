@@ -4,7 +4,7 @@ project(LastCourseWork)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_PREFIX_PATH "D:\\Qt\\5.15.1\\mingw81_64")
+set(CMAKE_PREFIX_PATH "D:\\Program Files\\MinGW\\mingw64")
 
 
 # включаем поиск библиотек с использованием find_package()
