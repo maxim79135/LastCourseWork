@@ -32,51 +32,20 @@ void RSA::saveSettings() {
     this->close();
 }
 
-std::vector<uint8_t> RSA::read_bytes(std::string textIn) {
-    std::vector<uint8_t> ret(textIn.length());
-    for (int i = 0; i < textIn.length(); i++) {
-        ret[i] = (uint8_t) textIn[i];
-        std::cout << ret[i];
+std::vector<uint64_t> RSA::encrypt(std::string text, key k) {
+    std::vector<uint64_t> ret(text.length());
+    for (uint i = 0; i < text.length(); i++) {
+        ret[i] = binpow(uint64_t(text[i]), k.e, k.m);
     }
-    std::cout << std::endl;
     return ret;
 }
 
-std::vector<uint8_t> RSA::process_bytes(const std::vector<uint8_t> &data, key k, bool encrypt) {
-    std::vector<uint64_t> data_64(data.size());
-    for (int i = 0; i < data.size(); i++)
-        data_64[i] = (uint64_t) data[i];
-    std::vector<uint64_t> resized_data = resize(data_64, 8, get_chunk_size(k) - encrypt); //Если мы шифруем, то размер блока K - 1, иначе K
-    std::vector<uint64_t> encrypted_data(resized_data.size());
-    for (int i = 0; i < resized_data.size(); i++)
-        encrypted_data[i] = binpow(resized_data[i], k.e, k.m);
-    std::vector<uint64_t> result_64 = resize(encrypted_data, get_chunk_size(k) - !encrypt, 8);
-    std::vector<uint8_t> result(result_64.size());
-    for (int i = 0; i < result_64.size(); i++) {
-        result[i] = (uint8_t) result_64[i];
-        //qDebug() << result[i] << " ";
+QString RSA::decrypt(std::vector<uint64_t> data, key k) {
+    QString ret;
+    for (uint i = 0; i < data.size(); i++) {
+        ret.append((char)binpow(data[i], k.e, k.m));
     }
-    return result;
-}
-
-std::vector<uint64_t> RSA::resize(const std::vector<uint64_t> &data, uint8_t in_size, uint8_t out_size) {
-    std::vector<uint64_t> res;
-    uint8_t done = 0;
-    uint64_t cur = 0;
-    for (uint64_t byte: data)
-        for (uint8_t i = 0; i < in_size; i++) {
-            cur = (cur << 1U) + (((uint64_t) byte & (1U << (uint64_t) (in_size - 1 - i))) != 0);
-            done++;
-            if (done == out_size) {
-                done = 0;
-                res.push_back(cur);
-                cur = 0;
-            }
-        }
-
-    if (done != 0)
-        res.push_back(cur << (uint64_t) (out_size - done));
-    return res;
+    return ret;
 }
 
 void RSA::gen_keys(uint64_t p, uint64_t q) {
@@ -85,7 +54,7 @@ void RSA::gen_keys(uint64_t p, uint64_t q) {
     this->phi = (p - 1) * (q - 1);
     this->n = p * q;
 
-    //Простое число Мерсенна, обычно используется в RSA в виде открытой экспоненты для увеличения производительности
+
     this->e = 65537;
     this->d = invmod(e, phi);
 }
@@ -108,20 +77,4 @@ int64_t RSA::invmod(int64_t a, int64_t m) {
     gcdex(a, m, x, y);
     x = (x % m + m) % m;
     return x;
-}
-
-QString RSA::write_bytes(const std::vector<uint8_t> &data) {
-    char* buf = new char[data.size()];
-    for (int i = 0; i < data.size(); i++) {
-        buf[i] = (char) data[i];
-        std::cout << data[i];
-    }
-    std::cout << std::endl;
-    QString ret = QString::fromLocal8Bit(buf);
-    QFile file(".\\output.txt");
-    if (file.open(QIODevice::WriteOnly)) {
-        QTextStream stream(&file);
-        stream << ret;
-    }
-    return ret;
 }

@@ -101,6 +101,19 @@
          <string>Дешифровать</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="geometry">
+         <rect>
+          <x>530</x>
+          <y>160</y>
+          <width>75</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Далее</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">

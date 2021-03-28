@@ -14,11 +14,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->textEdit_2->setReadOnly(true);
 
     rsa = new RSA();
+    rsa->gen_keys(3557, 2579);
 
     connect(ui->action_6, SIGNAL(triggered()), this, SLOT(createKeys()));
     connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(slotEncrypt()));
     connect(ui->pushButton_2, SIGNAL(clicked(bool)), this, SLOT(slotDecrypt()));
-    connect(this, SIGNAL(clicked(bool)), this, SLOT(nextCommandRSA(bool)));
 }
 
 MainWindow::~MainWindow() {
@@ -31,21 +31,26 @@ void MainWindow::createKeys() {
     }
 }
 
-void MainWindow::nextCommandRSA(bool encrypt) {
-    auto in = rsa->read_bytes(ui->textEdit->toPlainText().toStdString());
-    rsa->gen_keys(3557, 2579);
-    qDebug() << rsa->get_e() << " " << rsa->get_d() << " " << rsa->get_n();
-    auto out = rsa->process_bytes(in, {encrypt ? rsa->get_e() : rsa->get_d(), rsa->get_n()}, encrypt);
-    out = rsa->process_bytes(in, {static_cast<uint64_t>(encrypt ? 0x10001 : 0x4b1dc9), 0x8bf9ff}, encrypt);
-    ui->textEdit_2->setText(rsa->write_bytes(out));
-    //qDebug() << ui->textEdit->toPlainText() << Qt::endl << rsa->write_bytes(out);
+void MainWindow::nextCommandRSA() {
 }
 
 void MainWindow::slotEncrypt() {
-    emit clicked(true);
+    std::vector<uint64_t> ret = rsa->encrypt(ui->textEdit->toPlainText().toStdString(), {rsa->get_e(), rsa->get_n() });
+    QString s;
+    for (auto it: ret) {
+        s.append(QString::number(it) + ",");
+    }
+    qDebug() << s;
+    ui->textEdit_2->setText(s);
 }
 
 void MainWindow::slotDecrypt() {
-    emit clicked(false);
+    QStringList sl = ui->textEdit->toPlainText().split(",");
+    std::vector<uint64_t> data;
+    for (auto it: sl) {
+        data.push_back(it.toInt());
+    }
+    qDebug() << data;
+    QString s = rsa->decrypt(data, {rsa->get_d(), rsa->get_n() });
+    ui->textEdit_2->setText(s);
 }
-

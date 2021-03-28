@@ -20,16 +20,13 @@ public:
 
     ~MainWindow() override;
 
-signals:
-    void clicked(bool);
-
 private:
     Ui::MainWindow *ui;
     RSA *rsa;
 
 private slots:
     void createKeys();
-    void nextCommandRSA(bool);
+    void nextCommandRSA();
     void slotEncrypt();
     void slotDecrypt();
 
