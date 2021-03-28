@@ -16,9 +16,15 @@ MainWindow::MainWindow(QWidget *parent) :
     rsa = new RSA();
     rsa->gen_keys(3557, 2579);
 
+    p_elgamal = new elgamal();
+    p_elgamal->gen_keys(593);
+
     connect(ui->action_6, SIGNAL(triggered()), this, SLOT(createKeys()));
     connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(slotEncrypt()));
     connect(ui->pushButton_2, SIGNAL(clicked(bool)), this, SLOT(slotDecrypt()));
+
+    connect(ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(slotEncryptElgamal()));
+    connect(ui->pushButton_4, SIGNAL(clicked(bool)), this, SLOT(slotDecryptElgamal()));
 }
 
 MainWindow::~MainWindow() {
@@ -28,6 +34,8 @@ MainWindow::~MainWindow() {
 void MainWindow::createKeys() {
     if (ui->tabWidget->currentIndex() == 0) {
         rsa->show();
+    } else if (ui->tabWidget->currentIndex() == 1) {
+        p_elgamal->show();
     }
 }
 
@@ -53,4 +61,26 @@ void MainWindow::slotDecrypt() {
     qDebug() << data;
     QString s = rsa->decrypt(data, {rsa->get_d(), rsa->get_n() });
     ui->textEdit_2->setText(s);
+}
+
+void MainWindow::slotEncryptElgamal() {
+    std::vector<encrypt_data> ret = p_elgamal->encrypt(ui->textElgamal->toPlainText().toStdString(), {p_elgamal->get_p(), p_elgamal->get_g(), p_elgamal->get_y()});
+    QString s;
+    for (auto it: ret) {
+        s.append(QString::number(it.a) + ";" + QString::number((it.b)) + ",");
+    }
+    qDebug() << s;
+    ui->textElgamal_2->setText(s);
+}
+
+void MainWindow::slotDecryptElgamal() {
+    QStringList sl = ui->textElgamal->toPlainText().split(",");
+    std::vector<encrypt_data> data;
+
+    for (auto it: sl) {
+        QStringList _sl = it.split(";");
+        if (_sl[0] != "") data.push_back({(uint64_t)_sl[0].toInt(), (uint64_t)_sl[1].toInt()});
+    }
+    QString s = p_elgamal->decrypt(data, {p_elgamal->get_x()});
+    ui->textElgamal_2->setText(s);
 }

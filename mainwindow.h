@@ -7,6 +7,7 @@
 
 #include <QMainWindow>
 #include "rsa.h"
+#include "elgamal.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,13 +24,15 @@ public:
 private:
     Ui::MainWindow *ui;
     RSA *rsa;
+    elgamal *p_elgamal;
 
 private slots:
     void createKeys();
     void nextCommandRSA();
     void slotEncrypt();
     void slotDecrypt();
-
+    void slotEncryptElgamal();
+    void slotDecryptElgamal();
 };
 
 #endif //LASTCOURSEWORK_MAINWINDOW_H

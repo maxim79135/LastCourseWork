@@ -182,6 +182,33 @@ LastCourseWork_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\LastCourseWork.dir\build.make CMakeFiles/LastCourseWork.dir/LastCourseWork_autogen/mocs_compilation.cpp.s
 .PHONY : LastCourseWork_autogen/mocs_compilation.cpp.s
 
+elgamal.obj: elgamal.cpp.obj
+
+.PHONY : elgamal.obj
+
+# target to build an object file
+elgamal.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\LastCourseWork.dir\build.make CMakeFiles/LastCourseWork.dir/elgamal.cpp.obj
+.PHONY : elgamal.cpp.obj
+
+elgamal.i: elgamal.cpp.i
+
+.PHONY : elgamal.i
+
+# target to preprocess a source file
+elgamal.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\LastCourseWork.dir\build.make CMakeFiles/LastCourseWork.dir/elgamal.cpp.i
+.PHONY : elgamal.cpp.i
+
+elgamal.s: elgamal.cpp.s
+
+.PHONY : elgamal.s
+
+# target to generate assembly for a file
+elgamal.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\LastCourseWork.dir\build.make CMakeFiles/LastCourseWork.dir/elgamal.cpp.s
+.PHONY : elgamal.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -276,6 +303,9 @@ help:
 	@echo ... LastCourseWork_autogen/mocs_compilation.obj
 	@echo ... LastCourseWork_autogen/mocs_compilation.i
 	@echo ... LastCourseWork_autogen/mocs_compilation.s
+	@echo ... elgamal.obj
+	@echo ... elgamal.i
+	@echo ... elgamal.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
