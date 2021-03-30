@@ -36,6 +36,7 @@ private slots:
     void slotDecrypt();
     void slotEncryptElgamal();
     void slotDecryptElgamal();
+    void slotGenerateTestKeys();
 };
 
 #endif //LASTCOURSEWORK_MAINWINDOW_H

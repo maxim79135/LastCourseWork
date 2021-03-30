@@ -78,3 +78,58 @@ int64_t RSA::invmod(int64_t a, int64_t m) {
     x = (x % m + m) % m;
     return x;
 }
+
+void RSA::lockLineEdits() {
+    ui->lineEdit->setReadOnly(true);
+    ui->lineEdit_2->setReadOnly(true);
+    ui->lineEdit_3->setReadOnly(true);
+    ui->lineEdit_4->setReadOnly(true);
+    ui->lineEdit_5->setReadOnly(true);
+    ui->lineEdit_6->setReadOnly(true);
+}
+
+void RSA::createTemplateKeys() {
+    this->gen_keys(3557, 2579);
+    ui->lineEdit->setText(QString::number(this->p));
+    ui->lineEdit_2->setText(QString::number(this->q));
+    ui->lineEdit_3->setText(QString::number(this->n));
+    ui->lineEdit_4->setText(QString::number(this->phi));
+    ui->lineEdit_5->setText(QString::number(this->e));
+    ui->lineEdit_6->setText(QString::number(this->d));
+}
+
+bool RSA::isConfirmed() {
+    if (!ui->lineEdit->text().isEmpty() &&
+        !ui->lineEdit_2->text().isEmpty() &&
+        !ui->lineEdit_3->text().isEmpty() &&
+        !ui->lineEdit_4->text().isEmpty() &&
+        !ui->lineEdit_5->text().isEmpty() &&
+        !ui->lineEdit_6->text().isEmpty()) return true;
+    return false;
+}
+
+QString RSA::toString(std::vector<uint64_t> data) {
+    QString s;
+    for (auto it: data) {
+        s.append(QString::number(it) + ",");
+    }
+    return s;
+}
+
+void RSA::clearLineEdits() {
+    ui->lineEdit->clear();
+    ui->lineEdit_2->clear();
+    ui->lineEdit_3->clear();
+    ui->lineEdit_4->clear();
+    ui->lineEdit_5->clear();
+    ui->lineEdit_6->clear();
+}
+
+std::vector<uint64_t> RSA::toArray(QString s) {
+    QStringList sl = s.split(",");
+    std::vector<uint64_t> data;
+    for (auto it: sl) {
+        data.push_back(it.toInt());
+    }
+    return data;
+}

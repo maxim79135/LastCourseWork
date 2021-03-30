@@ -34,6 +34,12 @@ public:
     std::vector<uint64_t> encrypt(std::string, key);
     QString decrypt(std::vector<uint64_t>, key);
     void gen_keys(uint64_t p, uint64_t q);
+    void lockLineEdits();
+    void clearLineEdits();
+    void createTemplateKeys();
+    bool isConfirmed();
+    QString toString(std::vector<uint64_t>);
+    std::vector<uint64_t> toArray(QString);
 
 private:
     Ui::RSA *ui;
