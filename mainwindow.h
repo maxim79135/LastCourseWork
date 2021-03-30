@@ -8,6 +8,7 @@
 #include <QMainWindow>
 #include "rsa.h"
 #include "elgamal.h"
+#include "generatortask.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,6 +26,8 @@ private:
     Ui::MainWindow *ui;
     RSA *rsa;
     elgamal *p_elgamal;
+
+    GeneratorTask *gt;
 
 private slots:
     void createKeys();

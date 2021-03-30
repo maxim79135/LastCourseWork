@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(slotEncryptElgamal()));
     connect(ui->pushButton_4, SIGNAL(clicked(bool)), this, SLOT(slotDecryptElgamal()));
+
+    ui->textEdit->setText(gt->generateRandomString(10));
 }
 
 MainWindow::~MainWindow() {
