@@ -19,15 +19,15 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setCentralWidget(ui->tabWidget);
 
 
-    gt = new GeneratorTask();
-    gt->setMaxCount(5);
-    gt->generateTask();
+    gt.push_back(new GeneratorTask());
+    gt.push_back(new GeneratorTask());
+    gt[0]->setMaxCount(5);
+    gt[0]->generateTask();
+    gt[1]->setMaxCount(5);
+    gt[1]->generateTask();
 
     rsa = new RSA();
-    rsa->createTemplateKeys();
-
     p_elgamal = new elgamal();
-    p_elgamal->gen_keys(593);
 
     connect(ui->action_6, SIGNAL(triggered()), this, SLOT(createKeys()));
     connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(slotEncrypt()));
@@ -36,11 +36,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->encryptElgamal, SIGNAL(clicked(bool)), this, SLOT(slotEncryptElgamal()));
     connect(ui->decryptElgamal, SIGNAL(clicked(bool)), this, SLOT(slotDecryptElgamal()));
     connect(ui->nextCommandRSA, SIGNAL(clicked(bool)), this, SLOT(nextCommandRSA()));
-    connect(ui->generateKeys, SIGNAL(clicked(bool)), this, SLOT(slotGenerateTestKeys()));
+    connect(ui->nextCommandElgamal, SIGNAL(clicked(bool)), this, SLOT(nextCommandElgamal()));
+    connect(ui->generateKeys, SIGNAL(clicked(bool)), this, SLOT(slotGenerateTestKeysRSA()));
+    connect(ui->generateKeysElgamal, SIGNAL(clicked(bool)), this, SLOT(slotGenerateTestKeysElgamal()));
 
-//    ui->textEdit->setText(gt->generateRandomString(10));
     ui->title->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    ui->title->setText(gt->getCurrentTask());
+    ui->title_2->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    ui->title->setText(gt[0]->getCurrentTask());
+    ui->title_2->setText(gt[1]->getCurrentTask());
 }
 
 MainWindow::~MainWindow() {
@@ -56,20 +60,20 @@ void MainWindow::createKeys() {
 }
 
 void MainWindow::nextCommandRSA() {
-    int currentTaskType = gt->getCurrentTaskType();
+    int currentTaskType = gt[0]->getCurrentTaskType();
     switch (currentTaskType) {
         case 0: {
             if (rsa->isConfirmed()) {
-                gt->nextTask();
-                ui->listWidget->addItem(QString::number(gt->getCurrentTaskIndex()));
-                if (gt->isCompleted()) {
+                gt[0]->nextTask();
+                ui->listWidget->addItem(QString::number(gt[0]->getCurrentTaskIndex()));
+                if (gt[0]->isCompleted()) {
                     QMessageBox::information(this, "Успешно", "Все задания были успешно выполнены!");
                     return;
                 }
                 rsa->lockLineEdits();
-                ui->title->setText(gt->getCurrentTask());
-                int nextTaskType = gt->getCurrentTaskType();
-                QString text = gt->generateRandomString(20);
+                ui->title->setText(gt[0]->getCurrentTask());
+                int nextTaskType = gt[0]->getCurrentTaskType();
+                QString text = gt[0]->generateRandomString(20);
                 if (nextTaskType == 1)
                     ui->textEdit->setText(text);
                 else if (nextTaskType == 2)
@@ -84,15 +88,15 @@ void MainWindow::nextCommandRSA() {
             QString ret = ui->textEdit_2->toPlainText();
             if (!ret.isEmpty()) {
                 if (ret == rsa->toString(rsa->encrypt(ui->textEdit->toPlainText().toStdString(), {rsa->get_e(), rsa->get_n() }))) {
-                    gt->nextTask();
-                    ui->listWidget->addItem(QString::number(gt->getCurrentTaskIndex()));
-                    if (gt->isCompleted()) {
+                    gt[0]->nextTask();
+                    ui->listWidget->addItem(QString::number(gt[0]->getCurrentTaskIndex()));
+                    if (gt[0]->isCompleted()) {
                         QMessageBox::information(this, "Успешно", "Все задания были успешно выполнены!");
                         return;
                     }
-                    ui->title->setText(gt->getCurrentTask());
-                    int nextTaskType = gt->getCurrentTaskType();
-                    QString text = gt->generateRandomString(20);
+                    ui->title->setText(gt[0]->getCurrentTask());
+                    int nextTaskType = gt[0]->getCurrentTaskType();
+                    QString text = gt[0]->generateRandomString(20);
                     if (nextTaskType == 0) {
                         rsa->clearLineEdits();
                         ui->textEdit->clear();
@@ -115,15 +119,15 @@ void MainWindow::nextCommandRSA() {
             QString ret = ui->textEdit_2->toPlainText();
             if (!ret.isEmpty()) {
                 if (ret == rsa->decrypt(rsa->toArray(ui->textEdit->toPlainText()), {rsa->get_d(), rsa->get_n() })) {
-                    gt->nextTask();
-                    ui->listWidget->addItem(QString::number(gt->getCurrentTaskIndex()));
-                    if (gt->isCompleted()) {
+                    gt[0]->nextTask();
+                    ui->listWidget->addItem(QString::number(gt[0]->getCurrentTaskIndex()));
+                    if (gt[0]->isCompleted()) {
                         QMessageBox::information(this, "Успешно", "Все задания были успешно выполнены!");
                         return;
                     }
-                    ui->title->setText(gt->getCurrentTask());
-                    int nextTaskType = gt->getCurrentTaskType();
-                    QString text = gt->generateRandomString(20);
+                    ui->title->setText(gt[0]->getCurrentTask());
+                    int nextTaskType = gt[0]->getCurrentTaskType();
+                    QString text = gt[0]->generateRandomString(20);
                     if (nextTaskType == 0) {
                         rsa->clearLineEdits();
                         ui->textEdit->clear();
@@ -132,6 +136,96 @@ void MainWindow::nextCommandRSA() {
                         ui->textEdit->setText(text);
                     else
                         ui->textEdit->setText(rsa->toString(rsa->encrypt(text.toStdString(), {rsa->get_e(), rsa->get_n() })));
+                } else {
+                    QMessageBox::information(this, "Ошибка", "Неверно дешифрован текст!");
+                }
+            } else {
+                QMessageBox::information(this, "Ошибка", "Поле с дешифрованным сообщением не должно быть пустым!");
+            }
+
+            break;
+        }
+    }
+}
+
+void MainWindow::nextCommandElgamal() {
+    qDebug() << "2";
+    int currentTaskType = gt[1]->getCurrentTaskType();
+    switch (currentTaskType) {
+        case 0: {
+            if (p_elgamal->isConfirmed()) {
+                gt[1]->nextTask();
+                ui->listWidget_3->addItem(QString::number(gt[1]->getCurrentTaskIndex()));
+                if (gt[1]->isCompleted()) {
+                    QMessageBox::information(this, "Успешно", "Все задания были успешно выполнены!");
+                    return;
+                }
+                p_elgamal->lockLineEdits();
+                ui->title_2->setText(gt[1]->getCurrentTask());
+                int nextTaskType = gt[1]->getCurrentTaskType();
+                QString text = gt[1]->generateRandomString(20);
+                if (nextTaskType == 1)
+                    ui->textEdit_elgamal->setText(text);
+                else if (nextTaskType == 2)
+                    ui->textEdit_elgamal->setText(p_elgamal->toString(p_elgamal->encrypt(text.toStdString())));
+            } else {
+                QMessageBox::information(this, "Ошибка", "Неверно указаны параметры, необходимые для генерации ключей!");
+            }
+            break;
+        }
+
+        case 1: {
+            QString ret = ui->textEdit_elgamal_2->toPlainText();
+            if (!ret.isEmpty()) {
+                if (ret == p_elgamal->toString(p_elgamal->encrypt(ui->textEdit_elgamal->toPlainText().toStdString()))) {
+                    gt[1]->nextTask();
+                    ui->listWidget_3->addItem(QString::number(gt[1]->getCurrentTaskIndex()));
+                    if (gt[1]->isCompleted()) {
+                        QMessageBox::information(this, "Успешно", "Все задания были успешно выполнены!");
+                        return;
+                    }
+                    ui->title_2->setText(gt[1]->getCurrentTask());
+                    int nextTaskType = gt[1]->getCurrentTaskType();
+                    QString text = gt[1]->generateRandomString(20);
+                    if (nextTaskType == 0) {
+                        p_elgamal->clearLineEdits();
+                        ui->textEdit_elgamal->clear();
+                        ui->textEdit_elgamal_2->clear();
+                    } else if (nextTaskType == 1)
+                        ui->textEdit_elgamal->setText(text);
+                    else
+                        ui->textEdit_elgamal->setText(p_elgamal->toString(p_elgamal->encrypt(text.toStdString())));
+                } else {
+                    QMessageBox::information(this, "Ошибка", "Неверно зашифрован текст!");
+                }
+            } else {
+                QMessageBox::information(this, "Ошибка", "Поле с зашифрованным сообщением не должно быть пустым!");
+            }
+
+            break;
+        }
+
+        case 2: {
+            QString ret = ui->textEdit_elgamal_2->toPlainText();
+            if (!ret.isEmpty()) {
+                if (ret == p_elgamal->decrypt(p_elgamal->toArray(ui->textEdit_elgamal->toPlainText()))) {
+                    gt[1]->nextTask();
+                    ui->listWidget_3->addItem(QString::number(gt[1]->getCurrentTaskIndex()));
+                    if (gt[1]->isCompleted()) {
+                        QMessageBox::information(this, "Успешно", "Все задания были успешно выполнены!");
+                        return;
+                    }
+                    ui->title_2->setText(gt[1]->getCurrentTask());
+                    int nextTaskType = gt[1]->getCurrentTaskType();
+                    QString text = gt[1]->generateRandomString(20);
+                    if (nextTaskType == 0) {
+                        p_elgamal->clearLineEdits();
+                        ui->textEdit_elgamal->clear();
+                        ui->textEdit_elgamal_2->clear();
+                    } else if (nextTaskType == 1)
+                        ui->textEdit_elgamal->setText(text);
+                    else
+                         ui->textEdit_elgamal->setText(p_elgamal->toString(p_elgamal->encrypt(text.toStdString())));
                 } else {
                     QMessageBox::information(this, "Ошибка", "Неверно дешифрован текст!");
                 }
@@ -166,7 +260,7 @@ void MainWindow::slotDecrypt() {
 }
 
 void MainWindow::slotEncryptElgamal() {
-    std::vector<encrypt_data> ret = p_elgamal->encrypt(ui->textEdit_elgamal->toPlainText().toStdString(), {p_elgamal->get_p(), p_elgamal->get_g(), p_elgamal->get_y()});
+    std::vector<encrypt_data> ret = p_elgamal->encrypt(ui->textEdit_elgamal->toPlainText().toStdString());
     QString s;
     for (auto it: ret) {
         s.append(QString::number(it.a) + ";" + QString::number((it.b)) + ",");
@@ -183,10 +277,14 @@ void MainWindow::slotDecryptElgamal() {
         QStringList _sl = it.split(";");
         if (_sl[0] != "") data.push_back({(uint64_t)_sl[0].toInt(), (uint64_t)_sl[1].toInt()});
     }
-    QString s = p_elgamal->decrypt(data, {p_elgamal->get_x()});
+    QString s = p_elgamal->decrypt(data);
     ui->textEdit_elgamal_2->setText(s);
 }
 
-void MainWindow::slotGenerateTestKeys() {
+void MainWindow::slotGenerateTestKeysElgamal() {
+    p_elgamal->createTemplateKeys();
+}
+
+void MainWindow::slotGenerateTestKeysRSA() {
     rsa->createTemplateKeys();
 }

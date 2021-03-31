@@ -27,16 +27,18 @@ private:
     RSA *rsa;
     elgamal *p_elgamal;
 
-    GeneratorTask *gt;
+    std::vector<GeneratorTask*> gt;
 
 private slots:
     void createKeys();
     void nextCommandRSA();
+    void nextCommandElgamal();
     void slotEncrypt();
     void slotDecrypt();
     void slotEncryptElgamal();
     void slotDecryptElgamal();
-    void slotGenerateTestKeys();
+    void slotGenerateTestKeysRSA();
+    void slotGenerateTestKeysElgamal();
 };
 
 #endif //LASTCOURSEWORK_MAINWINDOW_H

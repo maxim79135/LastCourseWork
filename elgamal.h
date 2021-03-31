@@ -36,8 +36,15 @@ public:
     uint64_t get_x() { return x; };
 
     void gen_keys(uint64_t p);
-    std::vector<encrypt_data> encrypt(std::string, public_key);
-    QString decrypt(std::vector<encrypt_data>, private_key);
+    std::vector<encrypt_data> encrypt(std::string);
+    QString decrypt(std::vector<encrypt_data>);
+
+    void lockLineEdits();
+    void clearLineEdits();
+    void createTemplateKeys();
+    bool isConfirmed();
+    QString toString(std::vector<encrypt_data>);
+    std::vector<encrypt_data> toArray(QString);
 
 private:
     Ui::elgamal *ui;
