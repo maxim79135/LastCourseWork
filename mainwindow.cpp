@@ -13,7 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     ui->textEdit->setReadOnly(true);
-    ui->textElgamal->setReadOnly(true);
+    ui->textEdit->setMinimumWidth(200);
+    ui->textEdit_2->setMinimumWidth(200);
+    ui->textEdit_elgamal->setReadOnly(true);
     this->setCentralWidget(ui->tabWidget);
 
 
@@ -31,8 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(slotEncrypt()));
     connect(ui->pushButton_2, SIGNAL(clicked(bool)), this, SLOT(slotDecrypt()));
 
-    connect(ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(slotEncryptElgamal()));
-    connect(ui->pushButton_4, SIGNAL(clicked(bool)), this, SLOT(slotDecryptElgamal()));
+    connect(ui->encryptElgamal, SIGNAL(clicked(bool)), this, SLOT(slotEncryptElgamal()));
+    connect(ui->decryptElgamal, SIGNAL(clicked(bool)), this, SLOT(slotDecryptElgamal()));
     connect(ui->nextCommandRSA, SIGNAL(clicked(bool)), this, SLOT(nextCommandRSA()));
     connect(ui->generateKeys, SIGNAL(clicked(bool)), this, SLOT(slotGenerateTestKeys()));
 
@@ -164,17 +166,17 @@ void MainWindow::slotDecrypt() {
 }
 
 void MainWindow::slotEncryptElgamal() {
-    std::vector<encrypt_data> ret = p_elgamal->encrypt(ui->textElgamal->toPlainText().toStdString(), {p_elgamal->get_p(), p_elgamal->get_g(), p_elgamal->get_y()});
+    std::vector<encrypt_data> ret = p_elgamal->encrypt(ui->textEdit_elgamal->toPlainText().toStdString(), {p_elgamal->get_p(), p_elgamal->get_g(), p_elgamal->get_y()});
     QString s;
     for (auto it: ret) {
         s.append(QString::number(it.a) + ";" + QString::number((it.b)) + ",");
     }
     qDebug() << s;
-    ui->textElgamal_2->setText(s);
+    ui->textEdit_elgamal_2->setText(s);
 }
 
 void MainWindow::slotDecryptElgamal() {
-    QStringList sl = ui->textElgamal->toPlainText().split(",");
+    QStringList sl = ui->textEdit_elgamal->toPlainText().split(",");
     std::vector<encrypt_data> data;
 
     for (auto it: sl) {
@@ -182,7 +184,7 @@ void MainWindow::slotDecryptElgamal() {
         if (_sl[0] != "") data.push_back({(uint64_t)_sl[0].toInt(), (uint64_t)_sl[1].toInt()});
     }
     QString s = p_elgamal->decrypt(data, {p_elgamal->get_x()});
-    ui->textElgamal_2->setText(s);
+    ui->textEdit_elgamal_2->setText(s);
 }
 
 void MainWindow::slotGenerateTestKeys() {
