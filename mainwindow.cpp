@@ -14,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->textEdit->setReadOnly(true);
     ui->textElgamal->setReadOnly(true);
+    this->setCentralWidget(ui->tabWidget);
+
+
     gt = new GeneratorTask();
     gt->setMaxCount(5);
     gt->generateTask();
@@ -56,6 +59,7 @@ void MainWindow::nextCommandRSA() {
         case 0: {
             if (rsa->isConfirmed()) {
                 gt->nextTask();
+                ui->listWidget->addItem(QString::number(gt->getCurrentTaskIndex()));
                 if (gt->isCompleted()) {
                     QMessageBox::information(this, "Успешно", "Все задания были успешно выполнены!");
                     return;
@@ -79,6 +83,7 @@ void MainWindow::nextCommandRSA() {
             if (!ret.isEmpty()) {
                 if (ret == rsa->toString(rsa->encrypt(ui->textEdit->toPlainText().toStdString(), {rsa->get_e(), rsa->get_n() }))) {
                     gt->nextTask();
+                    ui->listWidget->addItem(QString::number(gt->getCurrentTaskIndex()));
                     if (gt->isCompleted()) {
                         QMessageBox::information(this, "Успешно", "Все задания были успешно выполнены!");
                         return;
@@ -109,6 +114,7 @@ void MainWindow::nextCommandRSA() {
             if (!ret.isEmpty()) {
                 if (ret == rsa->decrypt(rsa->toArray(ui->textEdit->toPlainText()), {rsa->get_d(), rsa->get_n() })) {
                     gt->nextTask();
+                    ui->listWidget->addItem(QString::number(gt->getCurrentTaskIndex()));
                     if (gt->isCompleted()) {
                         QMessageBox::information(this, "Успешно", "Все задания были успешно выполнены!");
                         return;

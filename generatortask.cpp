@@ -43,7 +43,7 @@ QString GeneratorTask::getCurrentTask() {
             return QString("Генерация ключей");
         case 1:
             return QString("Шифрование сообщения");
-        case 2:
+        default:
             return QString("Дешифрование сообщения");
     }
 }

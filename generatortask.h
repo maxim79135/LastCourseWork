@@ -16,6 +16,7 @@ public:
 
     void printTaskArray();
     void nextTask();
+    int getCurrentTaskIndex() { return this->currentIndexTask; }
     QString getCurrentTask();
     int getCurrentTaskType() { return this->taskArray[this->currentIndexTask]; }
     bool isCompleted() { return this->currentIndexTask == this->taskArray.size(); }
