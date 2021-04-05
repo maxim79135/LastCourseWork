@@ -9,6 +9,7 @@
 #include "rsa.h"
 #include "elgamal.h"
 #include "generatortask.h"
+#include "aes.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,6 +27,7 @@ private:
     Ui::MainWindow *ui;
     RSA *rsa;
     elgamal *p_elgamal;
+    AES *aes;
 
     std::vector<GeneratorTask*> gt;
 
@@ -37,6 +39,8 @@ private slots:
     void slotDecrypt();
     void slotEncryptElgamal();
     void slotDecryptElgamal();
+    void slotEncryptAES();
+    void slotDecryptAES();
     void slotGenerateTestKeysRSA();
     void slotGenerateTestKeysElgamal();
 };

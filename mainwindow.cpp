@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     rsa = new RSA();
     p_elgamal = new elgamal();
+    aes = new AES(128);
 
     connect(ui->action_6, SIGNAL(triggered()), this, SLOT(createKeys()));
     connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(slotEncrypt()));
@@ -39,6 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->nextCommandElgamal, SIGNAL(clicked(bool)), this, SLOT(nextCommandElgamal()));
     connect(ui->generateKeys, SIGNAL(clicked(bool)), this, SLOT(slotGenerateTestKeysRSA()));
     connect(ui->generateKeysElgamal, SIGNAL(clicked(bool)), this, SLOT(slotGenerateTestKeysElgamal()));
+
+    connect(ui->encryptAES, SIGNAL(clicked(bool)), this, SLOT(slotEncryptAES()));
 
     ui->title->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ui->title_2->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -77,9 +80,11 @@ void MainWindow::nextCommandRSA() {
                 if (nextTaskType == 1)
                     ui->textEdit->setText(text);
                 else if (nextTaskType == 2)
-                    ui->textEdit->setText(rsa->toString(rsa->encrypt(text.toStdString(), {rsa->get_e(), rsa->get_n() })));
+                    ui->textEdit->setText(
+                            rsa->toString(rsa->encrypt(text.toStdString(), {rsa->get_e(), rsa->get_n()})));
             } else {
-                QMessageBox::information(this, "Ошибка", "Неверно указаны параметры, необходимые для генерации ключей!");
+                QMessageBox::information(this, "Ошибка",
+                                         "Неверно указаны параметры, необходимые для генерации ключей!");
             }
             break;
         }
@@ -87,7 +92,8 @@ void MainWindow::nextCommandRSA() {
         case 1: {
             QString ret = ui->textEdit_2->toPlainText();
             if (!ret.isEmpty()) {
-                if (ret == rsa->toString(rsa->encrypt(ui->textEdit->toPlainText().toStdString(), {rsa->get_e(), rsa->get_n() }))) {
+                if (ret == rsa->toString(
+                        rsa->encrypt(ui->textEdit->toPlainText().toStdString(), {rsa->get_e(), rsa->get_n()}))) {
                     gt[0]->nextTask();
                     ui->listWidget->addItem(QString::number(gt[0]->getCurrentTaskIndex()));
                     if (gt[0]->isCompleted()) {
@@ -104,7 +110,8 @@ void MainWindow::nextCommandRSA() {
                     } else if (nextTaskType == 1)
                         ui->textEdit->setText(text);
                     else
-                        ui->textEdit->setText(rsa->toString(rsa->encrypt(text.toStdString(), {rsa->get_e(), rsa->get_n() })));
+                        ui->textEdit->setText(
+                                rsa->toString(rsa->encrypt(text.toStdString(), {rsa->get_e(), rsa->get_n()})));
                 } else {
                     QMessageBox::information(this, "Ошибка", "Неверно зашифрован текст!");
                 }
@@ -118,7 +125,7 @@ void MainWindow::nextCommandRSA() {
         case 2: {
             QString ret = ui->textEdit_2->toPlainText();
             if (!ret.isEmpty()) {
-                if (ret == rsa->decrypt(rsa->toArray(ui->textEdit->toPlainText()), {rsa->get_d(), rsa->get_n() })) {
+                if (ret == rsa->decrypt(rsa->toArray(ui->textEdit->toPlainText()), {rsa->get_d(), rsa->get_n()})) {
                     gt[0]->nextTask();
                     ui->listWidget->addItem(QString::number(gt[0]->getCurrentTaskIndex()));
                     if (gt[0]->isCompleted()) {
@@ -135,7 +142,8 @@ void MainWindow::nextCommandRSA() {
                     } else if (nextTaskType == 1)
                         ui->textEdit->setText(text);
                     else
-                        ui->textEdit->setText(rsa->toString(rsa->encrypt(text.toStdString(), {rsa->get_e(), rsa->get_n() })));
+                        ui->textEdit->setText(
+                                rsa->toString(rsa->encrypt(text.toStdString(), {rsa->get_e(), rsa->get_n()})));
                 } else {
                     QMessageBox::information(this, "Ошибка", "Неверно дешифрован текст!");
                 }
@@ -169,7 +177,8 @@ void MainWindow::nextCommandElgamal() {
                 else if (nextTaskType == 2)
                     ui->textEdit_elgamal->setText(p_elgamal->toString(p_elgamal->encrypt(text.toStdString())));
             } else {
-                QMessageBox::information(this, "Ошибка", "Неверно указаны параметры, необходимые для генерации ключей!");
+                QMessageBox::information(this, "Ошибка",
+                                         "Неверно указаны параметры, необходимые для генерации ключей!");
             }
             break;
         }
@@ -225,7 +234,7 @@ void MainWindow::nextCommandElgamal() {
                     } else if (nextTaskType == 1)
                         ui->textEdit_elgamal->setText(text);
                     else
-                         ui->textEdit_elgamal->setText(p_elgamal->toString(p_elgamal->encrypt(text.toStdString())));
+                        ui->textEdit_elgamal->setText(p_elgamal->toString(p_elgamal->encrypt(text.toStdString())));
                 } else {
                     QMessageBox::information(this, "Ошибка", "Неверно дешифрован текст!");
                 }
@@ -239,7 +248,7 @@ void MainWindow::nextCommandElgamal() {
 }
 
 void MainWindow::slotEncrypt() {
-    std::vector<uint64_t> ret = rsa->encrypt(ui->textEdit->toPlainText().toStdString(), {rsa->get_e(), rsa->get_n() });
+    std::vector<uint64_t> ret = rsa->encrypt(ui->textEdit->toPlainText().toStdString(), {rsa->get_e(), rsa->get_n()});
     QString s;
     for (auto it: ret) {
         s.append(QString::number(it) + ",");
@@ -255,7 +264,7 @@ void MainWindow::slotDecrypt() {
         data.push_back(it.toInt());
     }
     qDebug() << data;
-    QString s = rsa->decrypt(data, {rsa->get_d(), rsa->get_n() });
+    QString s = rsa->decrypt(data, {rsa->get_d(), rsa->get_n()});
     ui->textEdit_2->setText(s);
 }
 
@@ -275,7 +284,7 @@ void MainWindow::slotDecryptElgamal() {
 
     for (auto it: sl) {
         QStringList _sl = it.split(";");
-        if (_sl[0] != "") data.push_back({(uint64_t)_sl[0].toInt(), (uint64_t)_sl[1].toInt()});
+        if (_sl[0] != "") data.push_back({(uint64_t) _sl[0].toInt(), (uint64_t) _sl[1].toInt()});
     }
     QString s = p_elgamal->decrypt(data);
     ui->textEdit_elgamal_2->setText(s);
@@ -287,4 +296,21 @@ void MainWindow::slotGenerateTestKeysElgamal() {
 
 void MainWindow::slotGenerateTestKeysRSA() {
     rsa->createTemplateKeys();
+}
+
+void MainWindow::slotEncryptAES() {
+    unsigned char* plain = (unsigned char *) ui->textEdit_AES->toPlainText().toStdString().c_str();
+    unsigned char key[] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
+                           0x0f}; //key example
+    unsigned int plainLen = ui->textEdit_AES->toPlainText().size() * sizeof(unsigned char);  //bytes in plaintext
+    unsigned int outLen = 0;  // out param - bytes in сiphertext
+
+    unsigned char* c = aes->EncryptECB(plain, plainLen, key, outLen);
+    std::vector <int> ret;
+    for (int i = 0; i < plainLen; i++) ret.push_back((int) c[i]);
+    qDebug() << ret;
+}
+
+void MainWindow::slotDecryptAES() {
+
 }
